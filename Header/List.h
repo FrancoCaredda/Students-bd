@@ -14,6 +14,7 @@ int InitializeList(SNode **pList, FILE *pFile);
 int CalculateAvarageOfStudentsPoint(SNode *pList);
 int* FindPointsLessThenAvarageInList(SNode *pList, int nPointsCount);
 int ListLength(SNode *pList);
+int IsListEmpty(SNode *pList);
 
 void DeleteLastNode(SNode *pList);
 void PrintList(SNode *pList);

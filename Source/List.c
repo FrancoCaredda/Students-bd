@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 //--------------------------------------------------------------------------------
 // This function initialize list with data from pFile file.
@@ -24,7 +23,7 @@ int InitializeList(SNode **pList, FILE *pFile) {
             &pCurrentElement->sStudent.cSurname,
             &pCurrentElement->sStudent.cDateOfBirth,
             &pCurrentElement->sStudent.nPoint) != EOF) {
-        
+
         if (feof(pFile) != 0) {
             break;
         } else if (ferror(pFile) != 0) {
@@ -32,6 +31,11 @@ int InitializeList(SNode **pList, FILE *pFile) {
             fseek(pFile, 0, SEEK_SET);
             break;
         }
+
+        if (pCurrentElement->sStudent.nPoint > 5)
+            pCurrentElement->sStudent.nPoint = 5;
+        else if (pCurrentElement->sStudent.nPoint < 0)
+            pCurrentElement->sStudent.nPoint = 0;
 
         pElement = (SNode*)malloc(sizeof(SNode));
         
@@ -44,6 +48,13 @@ int InitializeList(SNode **pList, FILE *pFile) {
     }
 
     return 1;
+}
+//--------------------------------------------------------------------------------
+int IsListEmpty(SNode *pList) {
+    if (pList == NULL)
+        return 1;
+
+    return 0;
 }
 //--------------------------------------------------------------------------------
 void DeleteLastNode(SNode *pList) {
@@ -104,12 +115,13 @@ void RemoveNode(SNode **pList, int nPoint) {
     SNode *pCurrentElement = *pList, *pPrevious = NULL;
     SNode *pTemp = NULL;
 
-    while ((pCurrentElement->sStudent.nPoint != nPoint) && (pCurrentElement != NULL)) {
+    while ((pCurrentElement->sStudent.nPoint != nPoint) && 
+            (pCurrentElement->next != NULL)) {
         pPrevious = pCurrentElement;
         pCurrentElement = pCurrentElement->next;
     }
 
-    if (pCurrentElement == NULL)
+    if (pCurrentElement->sStudent.nPoint != nPoint)
         return;
 
     if (CompareStudents(&(*pList)->sStudent, &pCurrentElement->sStudent) == 1) {
@@ -156,8 +168,11 @@ int* FindPointsLessThenAvarageInList(SNode *pList, int nPointsCount) {
     int i = 0;
     while (pCurrentElement != NULL) {
         if (pCurrentElement->sStudent.nPoint < nAvaragePoint) {
-           pStudentsPoints[i] = pCurrentElement->sStudent.nPoint;
-           i++; 
+            pStudentsPoints[i] = pCurrentElement->sStudent.nPoint;
+            i++; 
+        } else {
+            pStudentsPoints[i] = 0;
+            i++;
         }
 
         pCurrentElement = pCurrentElement->next;

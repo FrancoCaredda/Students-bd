@@ -1,12 +1,12 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
-#define N 30
+#include "../Header/defines.h"
 
 typedef struct _SStudent {
-    char cName[N];
-    char cSurname[N];
-    char cDateOfBirth[N];
+    char cName[STRING_SIZE];
+    char cSurname[STRING_SIZE];
+    char cDateOfBirth[STRING_SIZE];
 
     int nPoint;
 } SStudent;
